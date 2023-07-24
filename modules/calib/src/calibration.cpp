@@ -1187,7 +1187,7 @@ static double stereoExtrinsicCalibrateImpl(
         const Mat& _imagePoints2, const Mat& _npoints,
         Mat& _cameraMatrix1, Mat& _distCoeffs1, bool isFisheye1,
         Mat& _cameraMatrix2, Mat& _distCoeffs2, bool isFisheye2,
-        Size imageSize, Mat matR, Mat matT,
+        Mat matR, Mat matT,
         Mat matE, Mat matF,
         Mat rvecs, Mat tvecs,
         Mat perViewErr, int flags,
@@ -1524,7 +1524,6 @@ static double stereoExtrinsicCalibrateImpl(
             ptPos += ni;
         }
         errnorm = reprojErr;
-        std::cout << "stereo errnorm: " << errnorm << std::endl;
         return true;
     };
 
@@ -2132,7 +2131,7 @@ double stereoExtrinsicCalibrate( InputArrayOfArrays _objectPoints,
                         InputArrayOfArrays _imagePoints2,
                         InputOutputArray _cameraMatrix1, InputOutputArray _distCoeffs1, bool isFisheye1,
                         InputOutputArray _cameraMatrix2, InputOutputArray _distCoeffs2, bool isFisheye2,
-                        Size imageSize, OutputArray _Rmat, OutputArray _Tmat,
+                        OutputArray _Rmat, OutputArray _Tmat,
                         OutputArray _Emat, OutputArray _Fmat, int flags,
                         TermCriteria criteria)
 {
@@ -2141,7 +2140,7 @@ double stereoExtrinsicCalibrate( InputArrayOfArrays _objectPoints,
 
     Mat Rmat, Tmat;
     double ret = stereoExtrinsicCalibrate(_objectPoints, _imagePoints1, _imagePoints2, _cameraMatrix1, _distCoeffs1, isFisheye1,
-                                 _cameraMatrix2, _distCoeffs2, isFisheye2, imageSize, Rmat, Tmat, _Emat, _Fmat,
+                                 _cameraMatrix2, _distCoeffs2, isFisheye2, Rmat, Tmat, _Emat, _Fmat,
                                  noArray(), flags, criteria);
     Rmat.copyTo(_Rmat);
     Tmat.copyTo(_Tmat);
@@ -2153,13 +2152,13 @@ double stereoExtrinsicCalibrate( InputArrayOfArrays _objectPoints,
                         InputArrayOfArrays _imagePoints2,
                         InputOutputArray _cameraMatrix1, InputOutputArray _distCoeffs1, bool isFisheye1,
                         InputOutputArray _cameraMatrix2, InputOutputArray _distCoeffs2, bool isFisheye2,
-                        Size imageSize, InputOutputArray _Rmat, InputOutputArray _Tmat,
+                        InputOutputArray _Rmat, InputOutputArray _Tmat,
                         OutputArray _Emat, OutputArray _Fmat,
                         OutputArray _perViewErrors, int flags,
                         TermCriteria criteria)
 {
     return stereoExtrinsicCalibrate(_objectPoints, _imagePoints1, _imagePoints2, _cameraMatrix1, _distCoeffs1, isFisheye1,
-                           _cameraMatrix2, _distCoeffs2, isFisheye2, imageSize, _Rmat, _Tmat, _Emat, _Fmat,
+                           _cameraMatrix2, _distCoeffs2, isFisheye2, _Rmat, _Tmat, _Emat, _Fmat,
                            noArray(), noArray(), _perViewErrors, flags, criteria);
 }
 
@@ -2168,7 +2167,7 @@ double stereoExtrinsicCalibrate( InputArrayOfArrays _objectPoints,
                         InputArrayOfArrays _imagePoints2,
                         InputOutputArray _cameraMatrix1, InputOutputArray _distCoeffs1, bool isFisheye1,
                         InputOutputArray _cameraMatrix2, InputOutputArray _distCoeffs2, bool isFisheye2,
-                        Size imageSize, InputOutputArray _Rmat, InputOutputArray _Tmat,
+                        InputOutputArray _Rmat, InputOutputArray _Tmat,
                         OutputArray _Emat, OutputArray _Fmat,
                         OutputArrayOfArrays _rvecs, OutputArrayOfArrays _tvecs,
                         OutputArray _perViewErrors, int flags,
@@ -2261,7 +2260,7 @@ double stereoExtrinsicCalibrate( InputArrayOfArrays _objectPoints,
     }
 
     double err = stereoExtrinsicCalibrateImpl(objPt, imgPt, imgPt2, npoints, cameraMatrix1,
-                                     distCoeffs1, isFisheye1, cameraMatrix2, distCoeffs2, isFisheye2, imageSize,
+                                     distCoeffs1, isFisheye1, cameraMatrix2, distCoeffs2, isFisheye2,
                                      matR, matT, matE, matF, rvecLM, tvecLM,
                                      matErr, flags, criteria);
     cameraMatrix1.copyTo(_cameraMatrix1);
